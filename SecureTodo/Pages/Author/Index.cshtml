@@ -1,0 +1,9 @@
+﻿@page
+@model SecureTodo.Pages.Author.IndexModel
+@{
+    ViewData["Title"] = "Кабинет автора";
+}
+
+<h1>Кабинет автора</h1>
+<p>Эта страница доступна только роли <strong>Author</strong> (и Admin).</p>
+<p>Ваши роли: <strong>@string.Join(", ", Model.Roles)</strong></p>

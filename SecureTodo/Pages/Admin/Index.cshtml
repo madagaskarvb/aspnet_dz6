@@ -1,0 +1,54 @@
+﻿@page
+@model SecureTodo.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Админ-панель";
+}
+
+<h1>Админ-панель</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<p>Всего пользователей: <strong>@Model.Users.Count</strong></p>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Имя</th>
+            <th>Текущие роли</th>
+            <th>Сменить роль</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.Users)
+        {
+            <tr>
+                <td>@row.User.Email</td>
+                <td>@row.User.FullName</td>
+                <td>@string.Join(", ", row.Roles)</td>
+                <td>
+                    <form method="post" asp-page-handler="ChangeRole" class="d-flex gap-2">
+                        <input type="hidden" name="userId" value="@row.User.Id" />
+                        <select name="newRole" class="form-select form-select-sm">
+                            @foreach (var r in new[] { "User", "Author", "Admin" })
+                            {
+                                <option value="@r"
+                                        selected="@(row.Roles.Contains(r) ? "selected" : null)">
+                                    @r
+                                </option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Применить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

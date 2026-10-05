@@ -1,0 +1,51 @@
+@host = https://localhost:7037
+@access = PASTE_ACCESS_TOKEN_HERE
+@refresh = PASTE_REFRESH_TOKEN_HERE
+
+### 1. Login → access + refresh
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@todo.com",
+    "password": "Admin123!"
+}
+
+### 2. GET tasks WITH access token → 200
+GET {{host}}/api/tasks
+Authorization: Bearer {{access}}
+
+### 3. Refresh → новая пара
+# @name refreshCall
+POST {{host}}/api/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "{{refresh}}"
+}
+
+### 4. Использовать СТАРЫЙ refresh ещё раз → 401 (ротация сработала)
+POST {{host}}/api/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "{{refresh}}"
+}
+
+### 5. Logout конкретного refresh
+POST {{host}}/api/auth/logout
+Authorization: Bearer {{access}}
+Content-Type: application/json
+
+{
+    "refreshToken": "{{refresh}}"
+}
+
+### 6. Logout-all → отозвать ВСЕ refresh пользователя
+POST {{host}}/api/auth/logout-all
+Authorization: Bearer {{access}}
+
+### 7. Истёкший access → 401
+GET {{host}}/api/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ExpiredTokenExample

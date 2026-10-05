@@ -1,0 +1,34 @@
+﻿@page "{id:int}"
+@model SecureTodo.Pages.Tasks.EditModel
+@{
+    ViewData["Title"] = "Редактирование задачи";
+}
+
+<h1>Редактирование задачи</h1>
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <input type="hidden" asp-for="Task.Id" />
+    <input type="hidden" asp-for="Task.UserId" />
+    <input type="hidden" asp-for="Task.CreatedAt" />
+
+    <div class="mb-3">
+        <label asp-for="Task.Title" class="form-label"></label>
+        <input asp-for="Task.Title" class="form-control" />
+        <span asp-validation-for="Task.Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Task.Description" class="form-label"></label>
+        <textarea asp-for="Task.Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="Task.IsCompleted" class="form-check-input" />
+        <label asp-for="Task.IsCompleted" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a asp-page="./Index" class="btn btn-secondary">Назад</a>
+</form>

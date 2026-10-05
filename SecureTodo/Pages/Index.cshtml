@@ -1,0 +1,23 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<h1>Безопасный Todo-менеджер</h1>
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <p>Привет, <strong>@Model.DisplayName</strong>!</p>
+    <p>Роли: @string.Join(", ", Model.Roles)</p>
+
+    <form method="post" asp-page="/Account/Logout" class="d-inline">
+        <button type="submit" class="btn btn-danger">Выйти</button>
+    </form>
+}
+else
+{
+    <p>Вы не вошли в систему.</p>
+    <a class="btn btn-primary" asp-page="/Account/Login">Войти</a>
+    <a class="btn btn-secondary" asp-page="/Account/Register">Зарегистрироваться</a>
+}

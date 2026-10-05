@@ -1,0 +1,50 @@
+﻿@page
+@model SecureTodo.Pages.Account.ProfileModel
+@{
+    ViewData["Title"] = "Профиль";
+}
+
+<h1>Профиль</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<dl class="row">
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+
+    <dt class="col-sm-3">Полное имя</dt>
+    <dd class="col-sm-9">@Model.FullName</dd>
+
+    <dt class="col-sm-3">Роли</dt>
+    <dd class="col-sm-9">@string.Join(", ", Model.Roles)</dd>
+
+    <dt class="col-sm-3">Двухфакторная аутентификация</dt>
+    <dd class="col-sm-9">
+        @if (Model.TwoFactorEnabled)
+        {
+            <span class="badge bg-success">Включена</span>
+        }
+        else
+        {
+            <span class="badge bg-secondary">Отключена</span>
+        }
+    </dd>
+</dl>
+
+@if (Model.TwoFactorEnabled)
+{
+    <form method="post" asp-page-handler="Disable2fa">
+        <button type="submit" class="btn btn-danger">Отключить 2FA</button>
+    </form>
+}
+else
+{
+    <a class="btn btn-primary" asp-page="./EnableAuthenticator">Включить 2FA</a>
+}

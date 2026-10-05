@@ -1,0 +1,57 @@
+﻿@page
+@model SecureTodo.Pages.Tasks.IndexModel
+@{
+    ViewData["Title"] = "Задачи";
+}
+
+<h1>Задачи</h1>
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <a class="btn btn-success mb-3" asp-page="/Tasks/Create">Создать задачу</a>
+}
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Заголовок</th>
+            <th>Описание</th>
+            <th>Создано</th>
+            <th>Статус</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.Items)
+        {
+            <tr data-task-row="@row.Task.Id">
+                <td>@row.Task.Title</td>
+                <td>@row.Task.Description</td>
+                <td>@row.Task.CreatedAt.ToLocalTime().ToString("g")</td>
+                <td class="status-cell">
+                    @(row.Task.IsCompleted ? "Выполнено" : "В работе")
+                </td>
+                <td>
+                    @if (row.CanEdit)
+                    {
+                        <button type="button"
+                                class="btn btn-sm btn-outline-success"
+                                data-mark-completed
+                                data-id="@row.Task.Id"
+                                @(row.Task.IsCompleted ? "disabled" : "")>
+                            Отметить выполненной
+                        </button>
+                        <a class="btn btn-sm btn-primary"
+                           asp-page="/Tasks/Edit" asp-route-id="@row.Task.Id">Редактировать</a>
+                        <a class="btn btn-sm btn-danger"
+                           asp-page="/Tasks/Delete" asp-route-id="@row.Task.Id">Удалить</a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Только просмотр</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
